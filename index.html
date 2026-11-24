@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>پاکو — تدوینگر ویدیو</title>
-  <meta name="description" content="نمونه‌کارهای پاکو، تدوینگر ویدیو؛ فیلم کوتاه، تبلیغات، موزیک‌ویدیو و مستند.">
-  <meta property="og:title" content="پاکو — تدوینگر ویدیو">
-  <meta property="og:description" content="هر فریم، یک داستان.">
+  <title>پاکو — تدوینگر ریلز و تولیدکننده‌ی محتوای هوش مصنوعی</title>
+  <meta name="description" content="نمونه‌کارهای پاکو؛ تدوین ریلز و ویدیوهای کوتاه و تولید محتوا با هوش مصنوعی.">
+  <meta property="og:title" content="پاکو — تدوینگر ریلز و محتوای هوش مصنوعی">
+  <meta property="og:description" content="ویدیوهای کوتاه، تأثیر بزرگ.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
   <meta name="theme-color" content="#000000">
@@ -15,15 +15,17 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
 
   <!-- ================= منو ================= -->
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="#top">پاکو</a>
       <nav aria-label="منوی اصلی">
-        <a href="#work">نمونه‌کارها</a>
-        <a href="#about">درباره</a>
-        <a href="#contact">تماس</a>
+        <a href="#reels">ریلز</a>
+        <a href="#ai">هوش مصنوعی</a>
+        <!-- ✏️ لینک تلگرام -->
+        <a class="nav-tg" href="https://t.me/ipxwill" target="_blank" rel="noopener">تلگرام</a>
       </nav>
     </div>
   </header>
@@ -31,82 +33,83 @@
   <main>
     <!-- ================= معرفی ================= -->
     <section class="hero" id="top">
-      <div class="wrap">
-        <p class="hero-kicker fade">تدوینگر ویدیو</p>
+      <div class="orbs" id="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="wrap hero-inner" id="hero-inner">
+        <p class="hero-kicker">پاکو · تدوینگر ریلز و ویدیوهای کوتاه · تولیدکننده‌ی محتوای هوش مصنوعی</p>
         <!-- ✏️ تیتر اصلی -->
-        <h1 class="hero-title fade">هر فریم،<br><span class="grad">یک داستان.</span></h1>
-        <!-- ✏️ یک جمله درباره‌ی کارتان -->
-        <p class="hero-sub fade">فیلم کوتاه، تبلیغات و موزیک‌ویدیو را با ریتم، رنگ و صدا زنده می‌کنم.</p>
-        <div class="hero-links fade">
-          <a class="btn" href="#work">دیدن نمونه‌کارها</a>
-          <!-- ✏️ لینک شوریل (یوتیوب یا ویمئو یا آپارات) را به جای # بگذارید -->
-          <a class="link" href="#" data-video>تماشای شوریل <span aria-hidden="true">‹</span></a>
+        <h1 class="hero-title">ویدیوی کوتاه،<br><span class="grad">تأثیر بزرگ.</span></h1>
+        <p class="hero-sub">ریلز و ویدیوهای کوتاهی می‌سازم که از همان ثانیه‌ی اول دیده می‌شوند؛ با تدوین پرانرژی و قدرت هوش مصنوعی.</p>
+        <div class="hero-links">
+          <a class="btn" href="#reels">دیدن نمونه‌کارها</a>
+          <a class="btn btn-tg" href="https://t.me/ipxwill" target="_blank" rel="noopener">
+            <svg class="tg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.6.1 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6l3.2-15.7c.2-.9-.7-1.7-1.6-1.4zM9.6 14.3l-.5 3.6-1.2-4 9.3-6.2-7.6 6.6z"/></svg>
+            پیام در تلگرام
+          </a>
         </div>
       </div>
+      <a class="scroll-hint" href="#reels" aria-label="رفتن به نمونه‌کارها"><span></span></a>
+    </section>
 
-      <!-- ✏️ شوریل: همان لینک بالا را اینجا هم به جای # بگذارید.
-           عکس پس‌زمینه (اختیاری): عکسی در پوشه‌ی images بگذارید و
-           style="--img:url('images/reel.jpg')" را داخل تگ <a> اضافه کنید. -->
+    <!-- ================= ریلز ================= -->
+    <!-- با اسکرول، ریلزها به صورت افقی جابه‌جا می‌شوند -->
+    <section class="reels" id="reels">
+      <div class="reels-sticky">
+        <div class="wrap">
+          <h2 class="section-title reveal-words">ریلز و ویدیوهای کوتاه.</h2>
+          <p class="section-sub">پنج نمونه از کارهای اخیر. روی هر کدام بزنید تا پخش شود.</p>
+        </div>
+        <!-- ✏️ پنج ریلز. در هر <a> به جای "#" لینک ویدیو را بگذارید
+             (اینستاگرام، یوتیوب شورتس، آپارات، یا فایل mp4 در پوشه‌ی images مثل images/reel1.mp4).
+             کاور (اختیاری): style="--img:url('images/reel1.jpg')" را داخل تگ <a> اضافه کنید. -->
+        <div class="track" id="track">
+          <a class="reel r1" href="#" data-video>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            <span class="reel-text"><b>ریلز ۱</b><small>تبلیغ محصول</small></span>
+          </a>
+          <a class="reel r2" href="#" data-video>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            <span class="reel-text"><b>ریلز ۲</b><small>ولاگ سفر</small></span>
+          </a>
+          <a class="reel r3" href="#" data-video>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            <span class="reel-text"><b>ریلز ۳</b><small>کافه و رستوران</small></span>
+          </a>
+          <a class="reel r4" href="#" data-video>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            <span class="reel-text"><b>ریلز ۴</b><small>فشن و استایل</small></span>
+          </a>
+          <a class="reel r5" href="#" data-video>
+            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+            <span class="reel-text"><b>ریلز ۵</b><small>موزیک و ریتم</small></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= نمونه‌کار هوش مصنوعی ================= -->
+    <section class="ai" id="ai">
       <div class="wrap">
-        <a class="reel" id="reel" href="#" data-video aria-label="پخش شوریل">
+        <p class="ai-badge"><span>AI</span> نمونه‌کار هوش مصنوعی</p>
+        <h2 class="section-title reveal-words">وقتی خلاقیت با هوش مصنوعی ترکیب می‌شود.</h2>
+        <!-- ✏️ لینک ویدیوی هوش مصنوعی را به جای "#" بگذارید.
+             کاور (اختیاری): style="--img:url('images/ai.jpg')" -->
+        <a class="ai-card" id="ai-card" href="#" data-video>
+          <span class="ai-glow" aria-hidden="true"></span>
           <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          <span class="reel-label">شوریل ۱۴۰۵</span>
+          <span class="ai-text"><b>رؤیای دیجیتال</b><small>ویدیوی ساخته‌شده با هوش مصنوعی</small></span>
         </a>
       </div>
     </section>
 
-    <!-- ================= نمونه‌کارها ================= -->
-    <section class="section" id="work">
-      <div class="wrap">
-        <h2 class="section-title fade">نمونه‌کارها. <span class="muted">چند پروژه‌ی منتخب.</span></h2>
-
-        <!-- ✏️ هر <a class="tile …"> یک پروژه است.
-             href = لینک ویدیو.   عکس کاور: style="--img:url('images/cover1.jpg')"
-             برای پروژه‌ی جدید یک بلوک را کپی کنید؛ برای حذف، آن را پاک کنید. -->
-        <div class="tiles">
-          <a class="tile tile-wide fade c1" href="#" data-video>
-            <span class="tile-text"><span class="tile-tag">فیلم کوتاه</span><span class="tile-title">آخرین قطار</span></span>
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          </a>
-          <a class="tile fade c2" href="#" data-video>
-            <span class="tile-text"><span class="tile-tag">تبلیغات</span><span class="tile-title">کافه بندر</span></span>
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          </a>
-          <a class="tile fade c3" href="#" data-video>
-            <span class="tile-text"><span class="tile-tag">موزیک‌ویدیو</span><span class="tile-title">شب‌های شهر</span></span>
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          </a>
-          <a class="tile tile-wide fade c4" href="#" data-video>
-            <span class="tile-text"><span class="tile-tag">مستند</span><span class="tile-title">صدای کویر</span></span>
-            <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= درباره ================= -->
-    <section class="section about" id="about">
-      <div class="wrap narrow">
-        <!-- ✏️ متن درباره‌ی شما -->
-        <p class="statement fade">من پاکو هستم. <span class="muted">بیش از هشت سال است که برای برندها، کارگردان‌ها و هنرمندان تدوین می‌کنم. بهترین تدوین آن است که دیده نشود، اما حس شود.</span></p>
-        <!-- ✏️ نرم‌افزارهایی که با آن‌ها کار می‌کنید -->
-        <p class="tools fade" dir="ltr">Premiere Pro · DaVinci Resolve · After Effects</p>
-      </div>
-    </section>
-
     <!-- ================= تماس ================= -->
-    <section class="section contact" id="contact">
+    <section class="contact" id="contact">
       <div class="wrap narrow">
-        <h2 class="contact-title fade">پروژه‌ی بعدی را<br><span class="grad">با هم بسازیم.</span></h2>
-        <!-- ✏️ ایمیل خود را در هر دو جا بنویسید -->
-        <a class="btn btn-lg fade" href="mailto:hello@example.com">ارسال ایمیل</a>
-        <p class="email fade" dir="ltr">hello@example.com</p>
-        <!-- ✏️ لینک صفحه‌های خود را به جای # بگذارید (یا خط را حذف کنید) -->
-        <p class="socials fade">
-          <a href="#" target="_blank" rel="noopener">اینستاگرام</a>
-          <a href="#" target="_blank" rel="noopener">یوتیوب</a>
-          <a href="#" target="_blank" rel="noopener">تلگرام</a>
-        </p>
+        <p class="contact-text reveal-words">برای همکاری، در تلگرام به من پیام بدهید تا پروژه‌ی بعدی را با هم بسازیم.</p>
+        <a class="btn btn-tg btn-lg pop" href="https://t.me/ipxwill" target="_blank" rel="noopener">
+          <svg class="tg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.4 3.6 2.9 10.8c-.9.4-.9 1.6.1 1.9l4.6 1.5 1.8 5.6c.2.7 1.1.9 1.6.4l2.6-2.4 4.8 3.5c.6.4 1.4.1 1.6-.6l3.2-15.7c.2-.9-.7-1.7-1.6-1.4zM9.6 14.3l-.5 3.6-1.2-4 9.3-6.2-7.6 6.6z"/></svg>
+          پیام به پاکو در تلگرام
+        </a>
+        <p class="handle" dir="ltr">@ipxwill</p>
       </div>
     </section>
   </main>
