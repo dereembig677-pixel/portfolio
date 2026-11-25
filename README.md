@@ -5,24 +5,20 @@
 | `index.html` | **All the text and links.** The only file you normally edit. |
 | `styles.css` | How it looks. No need to touch. |
 | `script.js` | The scroll animations and the video player. No need to touch. |
-| `images/` | Put cover pictures here. |
+| `videos/` | The 5 reels, the AI video, and their cover pictures (`.jpg`). |
+| `images/` | Spare folder for extra pictures. |
 | `fonts/` | The Persian font. Don't touch. |
 
 ## Changing things
 Open `index.html` on GitHub, click the ✏️ pencil, and look for **✏️** comments. Change only the words between the tags, then click **Commit changes**. The live site updates in about a minute.
 
-## Adding your videos
-There are **5 reel slots** and **1 AI slot**. In `index.html`, find each `href="#"` under the ✏️ notes and replace `#` with the video link:
-- an Instagram reel link (`https://www.instagram.com/reel/...`)
-- a YouTube Shorts or YouTube link
-- an Aparat or Vimeo link
-- or your own video file: upload `reel1.mp4` into `images`, then use `images/reel1.mp4`
+## Colours
+The palette is called "Midnight, lilac & peach". To change it, edit the `✏️` colour block at the top of `styles.css`.
 
-Clicking a slot then plays the video right on the page. Keep video files small (under ~20 MB each).
-
-## Adding a cover picture
-1. Upload the picture into the `images` folder (for example `reel1.jpg`).
-2. Add `style="--img:url('images/reel1.jpg')"` inside that slot's `<a class="reel …">` tag.
+## Replacing a video
+1. Make it small first: 720 px wide, ideally under 10 MB. Cloudflare refuses any single file over 25 MB.
+2. Upload it into `videos` with the same name (for example `reel-2.mp4`) to replace the old one. Also upload a cover picture with the matching name (`reel-2.jpg`).
+3. To change a title, edit the `<b>` (title) and `<small>` (description) text for that reel in `index.html`.
 
 ## Telegram
-Every Telegram button points to `https://t.me/ipxwill`. To change it, replace that link everywhere it appears in `index.html`.
+Every Telegram button points to `https://t.me/ipxwill`.

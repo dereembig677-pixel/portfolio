@@ -2,14 +2,15 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>پاکو — تدوینگر ریلز و تولیدکننده‌ی محتوای هوش مصنوعی</title>
   <meta name="description" content="نمونه‌کارهای پاکو؛ تدوین ریلز و ویدیوهای کوتاه و تولید محتوا با هوش مصنوعی.">
   <meta property="og:title" content="پاکو — تدوینگر ریلز و محتوای هوش مصنوعی">
-  <meta property="og:description" content="ویدیوهای کوتاه، تأثیر بزرگ.">
+  <meta property="og:description" content="ویدیوی کوتاه، تأثیر بزرگ.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
-  <meta name="theme-color" content="#000000">
+  <meta property="og:image" content="videos/reel-1.jpg">
+  <meta name="theme-color" content="#0e0c15">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/Vazirmatn-FD-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.css">
@@ -20,7 +21,7 @@
   <!-- ================= منو ================= -->
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="brand" href="#top">پاکو</a>
+      <a class="brand" href="#top">پاکو<span class="dot">.</span></a>
       <nav aria-label="منوی اصلی">
         <a href="#reels">ریلز</a>
         <a href="#ai">هوش مصنوعی</a>
@@ -35,10 +36,10 @@
     <section class="hero" id="top">
       <div class="orbs" id="orbs" aria-hidden="true"><i></i><i></i><i></i></div>
       <div class="wrap hero-inner" id="hero-inner">
-        <p class="hero-kicker">پاکو · تدوینگر ریلز و ویدیوهای کوتاه · تولیدکننده‌ی محتوای هوش مصنوعی</p>
+        <p class="hero-kicker"><span>تدوینگر ریلز و ویدیوی کوتاه</span><span class="sep">·</span><span>تولیدکننده‌ی محتوای هوش مصنوعی</span></p>
         <!-- ✏️ تیتر اصلی -->
         <h1 class="hero-title">ویدیوی کوتاه،<br><span class="grad">تأثیر بزرگ.</span></h1>
-        <p class="hero-sub">ریلز و ویدیوهای کوتاهی می‌سازم که از همان ثانیه‌ی اول دیده می‌شوند؛ با تدوین پرانرژی و قدرت هوش مصنوعی.</p>
+        <p class="hero-sub">من پاکو هستم. ریلز و ویدیوهای کوتاهی می‌سازم که از همان ثانیه‌ی اول دیده می‌شوند؛ با تدوین پرانرژی و قدرت هوش مصنوعی.</p>
         <div class="hero-links">
           <a class="btn" href="#reels">دیدن نمونه‌کارها</a>
           <a class="btn btn-tg" href="https://t.me/ipxwill" target="_blank" rel="noopener">
@@ -51,36 +52,39 @@
     </section>
 
     <!-- ================= ریلز ================= -->
-    <!-- با اسکرول، ریلزها به صورت افقی جابه‌جا می‌شوند -->
     <section class="reels" id="reels">
       <div class="reels-sticky">
         <div class="wrap">
           <h2 class="section-title reveal-words">ریلز و ویدیوهای کوتاه.</h2>
-          <p class="section-sub">پنج نمونه از کارهای اخیر. روی هر کدام بزنید تا پخش شود.</p>
+          <p class="section-sub">پنج نمونه از کارهای اخیر. برای پخش با صدا، روی هر ویدیو بزنید.</p>
         </div>
-        <!-- ✏️ پنج ریلز. در هر <a> به جای "#" لینک ویدیو را بگذارید
-             (اینستاگرام، یوتیوب شورتس، آپارات، یا فایل mp4 در پوشه‌ی images مثل images/reel1.mp4).
-             کاور (اختیاری): style="--img:url('images/reel1.jpg')" را داخل تگ <a> اضافه کنید. -->
+        <!-- ✏️ هر <a class="reel"> یک ریلز است:
+             href = فایل ویدیو (یا لینک اینستاگرام/یوتیوب)،  poster = عکس کاور،  b و small = عنوان و توضیح -->
         <div class="track" id="track">
-          <a class="reel r1" href="#" data-video>
+          <a class="reel" href="videos/reel-1.mp4" data-video>
+            <video muted loop playsinline preload="none" poster="videos/reel-1.jpg" src="videos/reel-1.mp4"></video>
             <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            <span class="reel-text"><b>ریلز ۱</b><small>تبلیغ محصول</small></span>
+            <span class="reel-text"><b>فراری</b><small>موشن‌گرافیک</small></span>
           </a>
-          <a class="reel r2" href="#" data-video>
+          <a class="reel" href="videos/reel-2.mp4" data-video>
+            <video muted loop playsinline preload="none" poster="videos/reel-2.jpg" src="videos/reel-2.mp4"></video>
             <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            <span class="reel-text"><b>ریلز ۲</b><small>ولاگ سفر</small></span>
+            <span class="reel-text"><b>برند پوشاک</b><small>تبلیغ فروشگاهی</small></span>
           </a>
-          <a class="reel r3" href="#" data-video>
+          <a class="reel" href="videos/reel-3.mp4" data-video>
+            <video muted loop playsinline preload="none" poster="videos/reel-3.jpg" src="videos/reel-3.mp4"></video>
             <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            <span class="reel-text"><b>ریلز ۳</b><small>کافه و رستوران</small></span>
+            <span class="reel-text"><b>کلینیک</b><small>معرفی خدمات</small></span>
           </a>
-          <a class="reel r4" href="#" data-video>
+          <a class="reel" href="videos/reel-4.mp4" data-video>
+            <video muted loop playsinline preload="none" poster="videos/reel-4.jpg" src="videos/reel-4.mp4"></video>
             <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            <span class="reel-text"><b>ریلز ۴</b><small>فشن و استایل</small></span>
+            <span class="reel-text"><b>مشاور املاک</b><small>تور ملک</small></span>
           </a>
-          <a class="reel r5" href="#" data-video>
+          <a class="reel" href="videos/reel-5.mp4" data-video>
+            <video muted loop playsinline preload="none" poster="videos/reel-5.jpg" src="videos/reel-5.mp4"></video>
             <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-            <span class="reel-text"><b>ریلز ۵</b><small>موزیک و ریتم</small></span>
+            <span class="reel-text"><b>پادکست</b><small>کلیپ و زیرنویس</small></span>
           </a>
         </div>
       </div>
@@ -88,15 +92,21 @@
 
     <!-- ================= نمونه‌کار هوش مصنوعی ================= -->
     <section class="ai" id="ai">
-      <div class="wrap">
-        <p class="ai-badge"><span>AI</span> نمونه‌کار هوش مصنوعی</p>
-        <h2 class="section-title reveal-words">وقتی خلاقیت با هوش مصنوعی ترکیب می‌شود.</h2>
-        <!-- ✏️ لینک ویدیوی هوش مصنوعی را به جای "#" بگذارید.
-             کاور (اختیاری): style="--img:url('images/ai.jpg')" -->
-        <a class="ai-card" id="ai-card" href="#" data-video>
-          <span class="ai-glow" aria-hidden="true"></span>
-          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          <span class="ai-text"><b>رؤیای دیجیتال</b><small>ویدیوی ساخته‌شده با هوش مصنوعی</small></span>
+      <div class="wrap ai-grid">
+        <div class="ai-copy">
+          <p class="ai-badge"><span>AI</span> نمونه‌کار هوش مصنوعی</p>
+          <h2 class="section-title reveal-words">وقتی خلاقیت با هوش مصنوعی ترکیب می‌شود.</h2>
+          <!-- ✏️ توضیح نمونه‌کار هوش مصنوعی -->
+          <p class="ai-desc">این ولاگ با هوش مصنوعی ساخته شده است؛ شخصیت، حرکت دوربین و حال‌وهوای یک ولاگ واقعی، بدون فیلم‌برداری.</p>
+          <a class="btn btn-ghost" href="videos/ai.mp4" data-video>
+            <svg class="tg-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+            تماشا با صدا
+          </a>
+        </div>
+        <!-- ✏️ ویدیوی هوش مصنوعی -->
+        <a class="phone" id="phone" href="videos/ai.mp4" data-video aria-label="پخش ویدیوی هوش مصنوعی">
+          <video id="ai-video" muted loop playsinline preload="none" poster="videos/ai.jpg" src="videos/ai.mp4"></video>
+          <span class="phone-tag">ساخته‌شده با AI</span>
         </a>
       </div>
     </section>
@@ -115,7 +125,7 @@
   </main>
 
   <footer class="footer">
-    <div class="wrap">© <span id="year">۱۴۰۵</span> پاکو</div>
+    <div class="wrap footer-inner"><span>© <span id="year">۱۴۰۵</span> پاکو</span><span dir="ltr">PAKO.frames</span></div>
   </footer>
 
   <!-- پنجره‌ی پخش ویدیو (خودکار کار می‌کند) -->

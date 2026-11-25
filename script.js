@@ -1,44 +1,44 @@
 // رفتارهای سایت و انیمیشن‌های اسکرول. لازم نیست چیزی را اینجا تغییر دهید.
 document.documentElement.classList.add('js');
 var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 var $ = function (id) { return document.getElementById(id); };
 var clamp = function (v) { return Math.min(Math.max(v, 0), 1); };
 
-// سال شمسی در پایین صفحه
+// سال شمسی
 try {
   $('year').textContent = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric' })
     .format(new Date()).replace(/[^۰-۹]/g, '');
 } catch (e) {}
 
-// جدا کردن کلمات برای افکت «روشن شدن کلمه به کلمه»
+// کلمه‌به‌کلمه روشن شدن متن
 var wordBlocks = Array.prototype.map.call(document.querySelectorAll('.reveal-words'), function (el) {
-  var words = el.textContent.trim().split(/\s+/);
-  el.innerHTML = words.map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
+  el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   return { el: el, words: el.querySelectorAll('.w') };
 });
 
-// دکمه‌ی پایانی با حالت «پاپ» ظاهر می‌شود
+// دکمه‌ی پایانی «پاپ» می‌شود
 var pops = document.querySelectorAll('.pop');
 if ('IntersectionObserver' in window) {
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: 0.4 });
-  pops.forEach(function (el) { io.observe(el); });
+  var popIo = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); popIo.unobserve(e.target); } });
+  }, { threshold: 0.3 });
+  pops.forEach(function (el) { popIo.observe(el); });
 } else { pops.forEach(function (el) { el.classList.add('in'); }); }
 
 var bar = $('progress'), heroInner = $('hero-inner'), orbs = $('orbs').children;
 var reels = $('reels'), track = $('track'), reelCards = track.children;
-var aiCard = $('ai-card');
+var phone = $('phone');
 
 function update() {
-  var vh = window.innerHeight, sy = window.scrollY;
-
-  // ۱. نوار پیشرفت بالای صفحه
+  var vh = window.innerHeight, sy = window.scrollY || window.pageYOffset;
   var max = document.documentElement.scrollHeight - vh;
-  bar.style.transform = 'scaleX(' + (max > 0 ? sy / max : 0) + ')';
 
-  // روشن شدن کلمات (برای همه، حتی بدون انیمیشن)
-  var nearEnd = clamp(1 - (max - sy) / (vh * 0.2)); // at the very bottom, finish every sentence
+  // ۱. نوار پیشرفت
+  bar.style.transform = 'scaleX(' + (max > 0 ? clamp(sy / max) : 0) + ')';
+
+  // ۲. روشن شدن کلمات
+  var nearEnd = clamp(1 - (max - sy) / (vh * 0.2));
   wordBlocks.forEach(function (b) {
     var r = b.el.getBoundingClientRect();
     var p = calm ? 1 : Math.max(clamp((vh - r.top) / (vh * 0.45)), r.bottom < vh ? nearEnd : 0);
@@ -47,39 +47,36 @@ function update() {
   });
   if (calm) return;
 
-  // ۲. متن معرفی کوچک، محو و تار می‌شود
-  var hp = clamp(sy / (vh * 0.8));
-  heroInner.style.transform = 'translateY(' + hp * -60 + 'px) scale(' + (1 - hp * 0.12) + ')';
-  heroInner.style.opacity = 1 - hp;
-  heroInner.style.filter = 'blur(' + hp * 8 + 'px)';
+  // ۳. متن معرفی کوچک و محو می‌شود
+  var hp = clamp(sy / (vh * 0.75));
+  heroInner.style.transform = 'translate3d(0,' + (hp * -70).toFixed(1) + 'px,0) scale(' + (1 - hp * 0.1).toFixed(3) + ')';
+  heroInner.style.opacity = (1 - hp).toFixed(3);
 
-  // ۳. گوی‌های رنگی با سرعت‌های مختلف حرکت می‌کنند
+  // ۴. نورهای رنگی با سرعت‌های متفاوت حرکت می‌کنند
+  var speeds = [0.3, -0.22, 0.12];
   for (var o = 0; o < orbs.length; o++) {
-    var sp = [0.35, -0.25, 0.15][o];
-    orbs[o].style.transform = 'translate3d(' + sy * sp * 0.4 + 'px,' + sy * sp + 'px,0)';
+    orbs[o].style.transform = 'translate3d(' + (sy * speeds[o] * 0.35).toFixed(1) + 'px,' + (sy * speeds[o]).toFixed(1) + 'px,0)';
   }
 
-  // ۴. ریلزها با اسکرول عمودی، افقی جابه‌جا می‌شوند و موج می‌زنند
+  // ۵. ریلزها افقی حرکت می‌کنند و موج می‌زنند
   var rr = reels.getBoundingClientRect();
-  var rp = clamp(-rr.top / (rr.height - vh));
-  var shift = Math.max(track.scrollWidth - window.innerWidth, 0);
-  track.style.transform = 'translateX(' + rp * shift + 'px)';
+  var rp = clamp(-rr.top / Math.max(rr.height - vh, 1));
+  var shift = Math.max(track.scrollWidth - document.documentElement.clientWidth, 0);
+  track.style.transform = 'translate3d(' + (rp * shift).toFixed(1) + 'px,0,0)';
   var enter = clamp((vh - rr.top) / vh);
   for (var k = 0; k < reelCards.length; k++) {
-    var c = reelCards[k];
     var appear = clamp(enter * 1.6 - k * 0.12);
-    c.style.setProperty('--y', ((1 - appear) * 120 + Math.sin(rp * 6 + k) * 14).toFixed(1) + 'px');
-    c.style.setProperty('--r', ((1 - appear) * (k % 2 ? 6 : -6)).toFixed(2) + 'deg');
-    c.style.opacity = appear.toFixed(2);
+    reelCards[k].style.setProperty('--y', ((1 - appear) * 110 + Math.sin(rp * 6 + k) * 12).toFixed(1) + 'px');
+    reelCards[k].style.setProperty('--r', ((1 - appear) * (k % 2 ? 6 : -6)).toFixed(2) + 'deg');
+    reelCards[k].style.opacity = appear.toFixed(2);
   }
 
-  // ۵. کارت هوش مصنوعی بزرگ می‌شود، گوشه‌هایش صاف‌تر و رنگ‌هایش می‌چرخند
-  var ar = aiCard.getBoundingClientRect();
-  var ap = clamp((vh - ar.top) / (vh * 0.9));
-  aiCard.style.setProperty('--s', (0.8 + ap * 0.2).toFixed(3));
-  aiCard.style.setProperty('--rad', (48 - ap * 20).toFixed(1) + 'px');
-  aiCard.style.setProperty('--spin', (sy * 0.15 % 360).toFixed(1) + 'deg');
-  aiCard.style.setProperty('--glow', ap.toFixed(2));
+  // ۶. گوشی هوش مصنوعی از حالت کج و سه‌بعدی صاف می‌شود
+  var pr = phone.getBoundingClientRect();
+  var pp = clamp((vh - pr.top) / (vh * 0.85));
+  phone.style.setProperty('--rx', ((1 - pp) * 28).toFixed(2) + 'deg');
+  phone.style.setProperty('--ry', ((1 - pp) * 18).toFixed(2) + 'deg');
+  phone.style.setProperty('--s', (0.82 + pp * 0.18).toFixed(3));
 }
 
 var ticking = false;
@@ -90,39 +87,61 @@ function onScroll() {
 }
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', onScroll);
+window.addEventListener('load', onScroll);
 update();
 
-// ===== پخش ویدیو داخل سایت =====
-// اینستاگرام، یوتیوب (و شورتس)، آپارات، ویمئو، یا فایل mp4. لینک‌های دیگر در تب جدید باز می‌شوند.
+// ===== پیش‌نمایش بی‌صدا =====
+function safePlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+// روی کامپیوتر: با بردن موس روی ریلز، بی‌صدا پخش می‌شود
+if (canHover) {
+  Array.prototype.forEach.call(reelCards, function (card) {
+    var v = card.querySelector('video');
+    card.addEventListener('mouseenter', function () { card.classList.add('previewing'); safePlay(v); });
+    card.addEventListener('mouseleave', function () { card.classList.remove('previewing'); v.pause(); });
+  });
+}
+// ویدیوی هوش مصنوعی وقتی دیده می‌شود، بی‌صدا پخش می‌شود
+var aiVideo = $('ai-video');
+if ('IntersectionObserver' in window && !calm) {
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) safePlay(aiVideo); else aiVideo.pause(); });
+  }, { threshold: 0.35 }).observe(aiVideo);
+}
+
+// ===== پخش ویدیو با صدا =====
 function source(url) {
   var m;
   if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return { video: url };
-  if ((m = url.match(/instagram\.com\/(?:reel|reels|p)\/([\w-]+)/))) return { src: 'https://www.instagram.com/reel/' + m[1] + '/embed', vertical: true };
-  if ((m = url.match(/youtube\.com\/shorts\/([\w-]{11})/))) return { src: 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0', vertical: true };
-  if ((m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/))) return { src: 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0' };
-  if ((m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/))) return { src: 'https://player.vimeo.com/video/' + m[1] + '?autoplay=1' };
-  if ((m = url.match(/aparat\.com\/v\/(\w+)/))) return { src: 'https://www.aparat.com/video/video/embed/videohash/' + m[1] + '/vt/frame' };
+  if ((m = url.match(/instagram\.com\/(?:reel|reels|p)\/([\w-]+)/))) return { src: 'https://www.instagram.com/reel/' + m[1] + '/embed' };
+  if ((m = url.match(/youtube\.com\/shorts\/([\w-]{11})/))) return { src: 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0' };
+  if ((m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/))) return { src: 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0', wide: true };
+  if ((m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/))) return { src: 'https://player.vimeo.com/video/' + m[1] + '?autoplay=1', wide: true };
+  if ((m = url.match(/aparat\.com\/v\/(\w+)/))) return { src: 'https://www.aparat.com/video/video/embed/videohash/' + m[1] + '/vt/frame', wide: true };
   return null;
 }
 var player = $('player'), frame = player.querySelector('.frame');
-function closePlayer() { frame.innerHTML = ''; if (player.open) player.close(); }
+function stopAll() { document.querySelectorAll('video').forEach(function (v) { if (!frame.contains(v)) v.pause(); }); }
+function closePlayer() { if (player.open) player.close(); }
+function cleanUp() { frame.innerHTML = ''; document.body.style.overflow = ''; if (aiVisible()) safePlay(aiVideo); }
+function aiVisible() { var r = aiVideo.getBoundingClientRect(); return !calm && r.bottom > 0 && r.top < window.innerHeight; }
 if (player.showModal) {
   player.querySelector('.close').addEventListener('click', closePlayer);
   player.addEventListener('click', function (e) { if (e.target === player) closePlayer(); });
-  player.addEventListener('close', function () { frame.innerHTML = ''; });
+  player.addEventListener('close', cleanUp);
 }
 document.querySelectorAll('[data-video]').forEach(function (a) {
   a.addEventListener('click', function (e) {
     var href = a.getAttribute('href');
-    if (!href || href === '#') { e.preventDefault(); return; } // هنوز لینکی گذاشته نشده
+    if (!href || href === '#') { e.preventDefault(); return; }
     var s = source(href);
     if (!s || !player.showModal) { a.target = '_blank'; a.rel = 'noopener'; return; }
     e.preventDefault();
-    var vertical = s.vertical || a.classList.contains('reel');
-    player.classList.toggle('vertical', vertical);
+    stopAll();
+    player.classList.toggle('wide', !!s.wide);
     frame.innerHTML = s.video
       ? '<video src="' + s.video + '" controls autoplay playsinline></video>'
       : '<iframe src="' + s.src + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="ویدیو"></iframe>';
+    document.body.style.overflow = 'hidden';
     player.showModal();
   });
 });
