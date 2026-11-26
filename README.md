@@ -13,7 +13,7 @@
 Open `index.html` on GitHub, click the ✏️ pencil, and look for **✏️** comments. Change only the words between the tags, then click **Commit changes**. The live site updates in about a minute.
 
 ## Colours
-The palette is called "Midnight, lilac & peach". To change it, edit the `✏️` colour block at the top of `styles.css`.
+The personal brand is "Pako red": warm black, cream, and a signature camera-REC red (#ff4a2b), with a camera viewfinder look. To change it, edit the `✏️` colour block at the top of `styles.css`.
 
 ## Replacing a video
 1. Make it small first: 720 px wide, ideally under 10 MB. Cloudflare refuses any single file over 25 MB.

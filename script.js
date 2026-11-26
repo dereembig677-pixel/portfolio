@@ -1,4 +1,5 @@
 // رفتارهای سایت و انیمیشن‌های اسکرول. لازم نیست چیزی را اینجا تغییر دهید.
+// نکته: هیچ انیمیشنی اسکرول را نگه نمی‌دارد؛ صفحه همیشه آزادانه بالا و پایین می‌رود.
 document.documentElement.classList.add('js');
 var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -11,34 +12,39 @@ try {
     .format(new Date()).replace(/[^۰-۹]/g, '');
 } catch (e) {}
 
+// تایم‌کد ویزور (مثل دوربین در حال ضبط)
+var tc = $('timecode'), t0 = Date.now();
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+if (tc && !calm) setInterval(function () {
+  var ms = Date.now() - t0, s = Math.floor(ms / 1000);
+  tc.textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s / 60) % 60) + ':' + pad(s % 60) + ':' + pad(Math.floor(ms / 33.33) % 30);
+}, 50);
+
 // کلمه‌به‌کلمه روشن شدن متن
 var wordBlocks = Array.prototype.map.call(document.querySelectorAll('.reveal-words'), function (el) {
   el.innerHTML = el.textContent.trim().split(/\s+/).map(function (w) { return '<span class="w">' + w + '</span>'; }).join(' ');
   return { el: el, words: el.querySelectorAll('.w') };
 });
 
-// دکمه‌ی پایانی «پاپ» می‌شود
-var pops = document.querySelectorAll('.pop');
-if ('IntersectionObserver' in window) {
-  var popIo = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); popIo.unobserve(e.target); } });
-  }, { threshold: 0.3 });
-  pops.forEach(function (el) { popIo.observe(el); });
-} else { pops.forEach(function (el) { el.classList.add('in'); }); }
+// ظاهر شدن یک‌باره (ریلزها پشت سر هم، دکمه‌ی پایانی «پاپ»)
+var once = document.querySelectorAll('.reel-row, .pop');
+if ('IntersectionObserver' in window && !calm) {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  once.forEach(function (el) { io.observe(el); });
+} else { once.forEach(function (el) { el.classList.add('in'); }); }
 
-var bar = $('progress'), heroInner = $('hero-inner'), orbs = $('orbs').children;
-var reels = $('reels'), track = $('track'), reelCards = track.children;
-var phone = $('phone');
+var bar = $('progress'), heroInner = $('hero-inner'), glow = $('glow'), phone = $('phone'), toTop = $('to-top');
 
 function update() {
   var vh = window.innerHeight, sy = window.scrollY || window.pageYOffset;
   var max = document.documentElement.scrollHeight - vh;
 
-  // ۱. نوار پیشرفت
-  bar.style.transform = 'scaleX(' + (max > 0 ? clamp(sy / max) : 0) + ')';
+  bar.style.transform = 'scaleX(' + (max > 0 ? clamp(sy / max) : 0) + ')';   // نوار پیشرفت
+  toTop.classList.toggle('show', sy > vh * 0.8);                             // دکمه‌ی بازگشت به بالا
 
-  // ۲. روشن شدن کلمات
-  var nearEnd = clamp(1 - (max - sy) / (vh * 0.2));
+  var nearEnd = clamp(1 - (max - sy) / (vh * 0.2));                          // روشن شدن کلمات
   wordBlocks.forEach(function (b) {
     var r = b.el.getBoundingClientRect();
     var p = calm ? 1 : Math.max(clamp((vh - r.top) / (vh * 0.45)), r.bottom < vh ? nearEnd : 0);
@@ -47,44 +53,23 @@ function update() {
   });
   if (calm) return;
 
-  // ۳. متن معرفی کوچک و محو می‌شود
-  var hp = clamp(sy / (vh * 0.75));
-  heroInner.style.transform = 'translate3d(0,' + (hp * -70).toFixed(1) + 'px,0) scale(' + (1 - hp * 0.1).toFixed(3) + ')';
-  heroInner.style.opacity = (1 - hp).toFixed(3);
-
-  // ۴. نورهای رنگی با سرعت‌های متفاوت حرکت می‌کنند
-  var speeds = [0.3, -0.22, 0.12];
-  for (var o = 0; o < orbs.length; o++) {
-    orbs[o].style.transform = 'translate3d(' + (sy * speeds[o] * 0.35).toFixed(1) + 'px,' + (sy * speeds[o]).toFixed(1) + 'px,0)';
+  if (sy < vh * 1.2) {                                                       // متن معرفی محو و نور جابه‌جا می‌شود
+    var hp = clamp(sy / (vh * 0.75));
+    heroInner.style.transform = 'translate3d(0,' + (hp * -60).toFixed(1) + 'px,0) scale(' + (1 - hp * 0.08).toFixed(3) + ')';
+    heroInner.style.opacity = (1 - hp).toFixed(3);
+    glow.style.transform = 'translate3d(0,' + (sy * 0.35).toFixed(1) + 'px,0)';
   }
 
-  // ۵. ریلزها افقی حرکت می‌کنند و موج می‌زنند
-  var rr = reels.getBoundingClientRect();
-  var rp = clamp(-rr.top / Math.max(rr.height - vh, 1));
-  var shift = Math.max(track.scrollWidth - document.documentElement.clientWidth, 0);
-  track.style.transform = 'translate3d(' + (rp * shift).toFixed(1) + 'px,0,0)';
-  var enter = clamp((vh - rr.top) / vh);
-  for (var k = 0; k < reelCards.length; k++) {
-    var appear = clamp(enter * 1.6 - k * 0.12);
-    reelCards[k].style.setProperty('--y', ((1 - appear) * 110 + Math.sin(rp * 6 + k) * 12).toFixed(1) + 'px');
-    reelCards[k].style.setProperty('--r', ((1 - appear) * (k % 2 ? 6 : -6)).toFixed(2) + 'deg');
-    reelCards[k].style.opacity = appear.toFixed(2);
+  var pr = phone.getBoundingClientRect();                                    // گوشی از حالت کج صاف می‌شود
+  if (pr.top < vh && pr.bottom > 0) {
+    var pp = clamp((vh - pr.top) / (vh * 0.85));
+    phone.style.setProperty('--rx', ((1 - pp) * 26).toFixed(2) + 'deg');
+    phone.style.setProperty('--ry', ((1 - pp) * 16).toFixed(2) + 'deg');
+    phone.style.setProperty('--s', (0.84 + pp * 0.16).toFixed(3));
   }
-
-  // ۶. گوشی هوش مصنوعی از حالت کج و سه‌بعدی صاف می‌شود
-  var pr = phone.getBoundingClientRect();
-  var pp = clamp((vh - pr.top) / (vh * 0.85));
-  phone.style.setProperty('--rx', ((1 - pp) * 28).toFixed(2) + 'deg');
-  phone.style.setProperty('--ry', ((1 - pp) * 18).toFixed(2) + 'deg');
-  phone.style.setProperty('--s', (0.82 + pp * 0.18).toFixed(3));
 }
-
 var ticking = false;
-function onScroll() {
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(function () { update(); ticking = false; });
-}
+function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { update(); ticking = false; }); }
 window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', onScroll);
 window.addEventListener('load', onScroll);
@@ -92,19 +77,18 @@ update();
 
 // ===== پیش‌نمایش بی‌صدا =====
 function safePlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-// روی کامپیوتر: با بردن موس روی ریلز، بی‌صدا پخش می‌شود
 if (canHover) {
-  Array.prototype.forEach.call(reelCards, function (card) {
+  document.querySelectorAll('.reel').forEach(function (card) {
     var v = card.querySelector('video');
     card.addEventListener('mouseenter', function () { card.classList.add('previewing'); safePlay(v); });
     card.addEventListener('mouseleave', function () { card.classList.remove('previewing'); v.pause(); });
   });
 }
-// ویدیوی هوش مصنوعی وقتی دیده می‌شود، بی‌صدا پخش می‌شود
 var aiVideo = $('ai-video');
+function aiVisible() { var r = aiVideo.getBoundingClientRect(); return !calm && r.bottom > 0 && r.top < window.innerHeight; }
 if ('IntersectionObserver' in window && !calm) {
   new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) safePlay(aiVideo); else aiVideo.pause(); });
+    es.forEach(function (e) { if (e.isIntersecting && !player.open) safePlay(aiVideo); else aiVideo.pause(); });
   }, { threshold: 0.35 }).observe(aiVideo);
 }
 
@@ -120,14 +104,11 @@ function source(url) {
   return null;
 }
 var player = $('player'), frame = player.querySelector('.frame');
-function stopAll() { document.querySelectorAll('video').forEach(function (v) { if (!frame.contains(v)) v.pause(); }); }
 function closePlayer() { if (player.open) player.close(); }
-function cleanUp() { frame.innerHTML = ''; document.body.style.overflow = ''; if (aiVisible()) safePlay(aiVideo); }
-function aiVisible() { var r = aiVideo.getBoundingClientRect(); return !calm && r.bottom > 0 && r.top < window.innerHeight; }
 if (player.showModal) {
   player.querySelector('.close').addEventListener('click', closePlayer);
   player.addEventListener('click', function (e) { if (e.target === player) closePlayer(); });
-  player.addEventListener('close', cleanUp);
+  player.addEventListener('close', function () { frame.innerHTML = ''; if (aiVisible()) safePlay(aiVideo); });
 }
 document.querySelectorAll('[data-video]').forEach(function (a) {
   a.addEventListener('click', function (e) {
@@ -136,12 +117,11 @@ document.querySelectorAll('[data-video]').forEach(function (a) {
     var s = source(href);
     if (!s || !player.showModal) { a.target = '_blank'; a.rel = 'noopener'; return; }
     e.preventDefault();
-    stopAll();
+    document.querySelectorAll('video').forEach(function (v) { v.pause(); });
     player.classList.toggle('wide', !!s.wide);
     frame.innerHTML = s.video
       ? '<video src="' + s.video + '" controls autoplay playsinline></video>'
       : '<iframe src="' + s.src + '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="ویدیو"></iframe>';
-    document.body.style.overflow = 'hidden';
     player.showModal();
   });
 });
