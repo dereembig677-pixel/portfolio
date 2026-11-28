@@ -84,6 +84,8 @@ if (canHover) {
     card.addEventListener('mouseleave', function () { card.classList.remove('previewing'); v.pause(); });
   });
 }
+var introVideo = $('intro-video');
+if (calm) { introVideo.removeAttribute('autoplay'); introVideo.pause(); }
 var aiVideo = $('ai-video');
 function aiVisible() { var r = aiVideo.getBoundingClientRect(); return !calm && r.bottom > 0 && r.top < window.innerHeight; }
 if ('IntersectionObserver' in window && !calm) {
@@ -108,7 +110,7 @@ function closePlayer() { if (player.open) player.close(); }
 if (player.showModal) {
   player.querySelector('.close').addEventListener('click', closePlayer);
   player.addEventListener('click', function (e) { if (e.target === player) closePlayer(); });
-  player.addEventListener('close', function () { frame.innerHTML = ''; if (aiVisible()) safePlay(aiVideo); });
+  player.addEventListener('close', function () { frame.innerHTML = ''; if (aiVisible()) safePlay(aiVideo); if (!calm) safePlay(introVideo); });
 }
 document.querySelectorAll('[data-video]').forEach(function (a) {
   a.addEventListener('click', function (e) {
